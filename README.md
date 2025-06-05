@@ -11,3 +11,22 @@
 - DateTimeUtils
 
   for example: `convertToOffsetDateTime(LocalDateTime source)`
+
+
+# dependency
+
+- maven
+
+  ```xml
+  <dependency>
+      <groupId>io.github.mitsumi-solutions-develop</groupId>
+      <artifactId>java-shared-utils</artifactId>
+      <version>1.0.0</version>
+  </dependency>
+  ```
+
+- gradle
+
+  ```
+  implementation group: 'io.github.mitsumi-solutions-develop', name: 'java-shared-utils', version: '1.0.0'
+  ```
