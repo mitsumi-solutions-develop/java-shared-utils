@@ -1,175 +1,281 @@
 package io.github.mitsumi.solutions.shared.utils;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Date;
 import java.util.Objects;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+/**
+ * DateTimeUtils.
+ *
+ * @author mitsumi.kaneyama
+ */
+@SuppressWarnings({"PMD.UseExplicitTypes", "PMD.TooManyMethods"})
+@UtilityClass
 public final class DateTimeUtils {
 
+    /**
+     * UTC ZONE ID.
+     */
     public static final ZoneId ZONE_ID_UTC = ZoneId.of("UTC");
+
+    /**
+     * JST ZONE ID.
+     */
     public static final ZoneId ZONE_ID_JST = ZoneId.of("Asia/Tokyo");
 
     /**
-     * UTC時間を取得.
+     * Return system utc date time.
      *
-     * @return UTC時間
+     * @return utc date time
      */
     public static LocalDateTime getUtcTime() {
         return LocalDateTime.now(ZONE_ID_UTC);
     }
 
+    /**
+     * Return system jst date time.
+     *
+     * @return jst date time
+     */
     public static LocalDateTime getJstTime() {
         return LocalDateTime.now(ZONE_ID_JST);
     }
 
     /**
-     * UTCのZonedDateTimeを返却.
+     * Return system zoned utc date time.
      *
-     * @return UTCのZonedDateTime
+     * @return system zoned date time
      */
     public static ZonedDateTime getUtcZonedDateTime() {
         return getUtcTime().atZone(ZONE_ID_UTC);
     }
 
     /**
-     * システムデフォルトのOffsetDateTimeを返却.
+     * Return system offset date time.
      *
-     * @return システムデフォルトのOffsetDateTime
+     * @return system offset date time
      */
     public static OffsetDateTime getOffsetDateTime() {
         return OffsetDateTime.now();
     }
 
     /**
-     * UTCのEpochSecondを返却.
+     * Return utc epoch second.
      *
-     * @return UTCのEpochSecond
+     * @return utc epoch second
      */
     public static long getUtcEpochSecond() {
         return getUtcZonedDateTime().toEpochSecond();
     }
 
     /**
-     * 時間を比較.
+     * Determine if there is the same.
      *
-     * @param t1 比較対象1
-     * @param t2 比較対象2
-     * @return 時間を比較判定値
+     * @param source Comparison source
+     * @param target Comparison target
+     * @return {@code boolean}
      */
-    public static boolean isSame(LocalDateTime t1, LocalDateTime t2) {
-        return t1.equals(t2);
+    public static boolean isSame(final LocalDateTime source, final LocalDateTime target) {
+        return source.equals(target);
     }
 
     /**
-     * 時間を比較.
+     * Determine if there is the same.
      *
-     * @param t1 比較対象1
-     * @param t2 比較対象2
-     * @return 時間を比較判定値
+     * @param source Comparison source
+     * @param target Comparison target
+     * @return {@code boolean}
      */
-    public static boolean isSame(OffsetDateTime t1, LocalDateTime t2) {
-        return isSame(t1.toLocalDateTime(), t2);
+    public static boolean isSame(final OffsetDateTime source, final LocalDateTime target) {
+        return isSame(source.toLocalDateTime(), target);
     }
 
     /**
-     * 時間を比較(ms単位まで).
+     * Determine if there is the same.
      *
-     * @param t1 比較対象1
-     * @param t2 比較対象2
-     * @return 時間を比較判定値
+     * @param source Comparison source
+     * @param target Comparison target
+     * @return {@code boolean}
      */
-    public static boolean isSameMs(LocalDateTime t1, LocalDateTime t2) {
-        TemporalUnit compareUnit = ChronoUnit.MILLIS;
-        return t1.truncatedTo(compareUnit).equals(t2.truncatedTo(compareUnit));
+    public static boolean isSameMs(final LocalDateTime source, final LocalDateTime target) {
+        final var compareUnit = ChronoUnit.MILLIS;
+        return source.truncatedTo(compareUnit).equals(target.truncatedTo(compareUnit));
     }
 
 
     /**
-     * チェック対象が開始時間～終了時間の間かチェック.
-     * @param target チェック対象
-     * @param from 開始時間
-     * @param to 終了時間
-     * @return 判定値
+     * Determine there are in the range.
+     *
+     * @param target       target
+     * @param fromDateTime from
+     * @param endDateTime  end
+     * @return {@code boolean}
      */
-    public static boolean isBetween(LocalDateTime target, LocalDateTime from, LocalDateTime to) {
-        return !target.isAfter(to) && !target.isBefore(from);
+    public static boolean isBetween(final LocalDateTime target,
+                                    final LocalDateTime fromDateTime,
+                                    final LocalDateTime endDateTime) {
+        return !target.isAfter(fromDateTime) && !target.isBefore(endDateTime);
     }
 
     /**
-     * チェック対象が開始時間～終了時間の間かチェック.
-     * @param target チェック対象
-     * @param from 開始時間
-     * @param to 終了時間
-     * @return 判定値
+     * Determine there are in the range.
+     *
+     * @param target       target
+     * @param fromDateTime from
+     * @param endDateTime  end
+     * @return {@code boolean}
      */
-    public static boolean isBetween(OffsetDateTime target, LocalDateTime from, LocalDateTime to) {
-        return isBetween(target.toLocalDateTime(), from, to);
+    public static boolean isBetween(final OffsetDateTime target,
+                                    final LocalDateTime fromDateTime,
+                                    final LocalDateTime endDateTime) {
+        return isBetween(target.toLocalDateTime(), fromDateTime, endDateTime);
     }
 
-    public static OffsetDateTime getOffsetDateTimeUtc(int year, int month, int dayOfMonth,
-                                                      int hour, int minute, int second) {
-        return OffsetDateTime.of(year, month, dayOfMonth, hour, minute, second, 0,
-                ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now()))
-            .withOffsetSameInstant(ZoneOffset.UTC);
+    /**
+     * Get OffsetDateTime of UTC Zone.
+     *
+     * @param year year
+     * @param month month
+     * @param dayOfMonth day of month
+     * @param hour hour
+     * @param minute minute
+     * @param second second
+     * @return {@code OffsetDateTime}
+     */
+    public static OffsetDateTime getOffsetDateTimeUtc(final int year,
+                                                      final int month,
+                                                      final int dayOfMonth,
+                                                      final int hour,
+                                                      final int minute,
+                                                      final int second) {
+        return OffsetDateTime.of(
+            year, month, dayOfMonth, hour, minute, second, 0,
+            ZoneOffset.systemDefault().getRules().getOffset(LocalDateTime.now())
+        ).withOffsetSameInstant(ZoneOffset.UTC);
     }
 
-    public static OffsetDateTime getUtcOffsetDateTimeFromJst(int year, int month, int dayOfMonth,
-                                                             int hour, int minute, int second) {
-        var jstLocalDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
-        var jstZonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
-        var utcZonedDateTime = jstZonedDateTime.withZoneSameInstant(ZONE_ID_UTC);
+    /**
+     * Get OffsetDateTime of JST Zone.
+     *
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @param hour hour
+     * @param minute minute
+     * @param second second
+     * @return {@code OffsetDateTime}
+     */
+    public static OffsetDateTime getUtcOffsetDateTimeFromJst(final int year,
+                                                             final int month,
+                                                             final int dayOfMonth,
+                                                             final int hour,
+                                                             final int minute,
+                                                             final int second) {
+        final var jstLocalDateTime = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+        final var jstZonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
+        final var utcZonedDateTime = jstZonedDateTime.withZoneSameInstant(ZONE_ID_UTC);
 
         return utcZonedDateTime.toOffsetDateTime();
     }
 
     /**
      * Convert from LocalDateTime to OffsetDateTime(Offset:UTC).
+     *
      * @param localDateTime value of local date time
      * @return offsetDateTime the result of converted
      */
-    public static OffsetDateTime toOffsetDateTime(LocalDateTime localDateTime) {
+    public static OffsetDateTime toOffsetDateTime(final LocalDateTime localDateTime) {
         return toOffsetDateTime(localDateTime, ZoneOffset.UTC);
     }
 
-    public static OffsetDateTime toOffsetDateTime(LocalDateTime localDateTime, ZoneOffset zoneOffset) {
-        if (localDateTime == null) {
-            return null;
+    /**
+     * Convert from LocalDateTime to OffsetDateTime(Specified Zone).
+     *
+     * @param localDateTime localDateTime
+     * @param zoneOffset zoneOffset
+     * @return offsetDateTime the result of converted
+     */
+    public static OffsetDateTime toOffsetDateTime(final LocalDateTime localDateTime,
+                                                  final ZoneOffset zoneOffset) {
+        if (Objects.isNull(localDateTime)) {
+            throw new IllegalArgumentException("specified localDateTime cannot be null.");
         }
+
         return OffsetDateTime.of(localDateTime, zoneOffset);
     }
 
-    public static OffsetDateTime toJSTOffsetDateTime(LocalDateTime jstLocalDateTime) {
-        var localZonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
-        return OffsetDateTime.ofInstant(localZonedDateTime.toInstant(), ZONE_ID_JST);
+    /**
+     * Convert from LocalDateTime to OffsetDateTime(Offset:JST).
+     *
+     * @param jstLocalDateTime value of local date time
+     * @return offsetDateTime the result of converted
+     */
+    public static OffsetDateTime toJSTOffsetDateTime(final LocalDateTime jstLocalDateTime) {
+        final var zonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
+
+        return OffsetDateTime.ofInstant(zonedDateTime.toInstant(), ZONE_ID_JST);
     }
 
-    public static OffsetDateTime toJSTOffsetDateTime(OffsetDateTime utcOffsetDateTime) {
-        var zonedDateTime = utcOffsetDateTime.toZonedDateTime();
-        var jstZonedDateTime = zonedDateTime.withZoneSameInstant(ZONE_ID_JST);
+    /**
+     * Convert UTC offset date time to JST offset date time.
+     *
+     * @param utcOffsetDateTime UTC offset date time
+     * @return JST offset date time
+     */
+    public static OffsetDateTime toJSTOffsetDateTime(final OffsetDateTime utcOffsetDateTime) {
+        final var zonedDateTime = utcOffsetDateTime.toZonedDateTime();
+        final var jstZonedDateTime = zonedDateTime.withZoneSameInstant(ZONE_ID_JST);
 
         return OffsetDateTime.ofInstant(jstZonedDateTime.toInstant(), ZONE_ID_JST);
     }
 
-    public static OffsetDateTime toJSTOffsetDateTimeWithUtc(LocalDateTime utcLocalDateTime) {
-        var utcZonedDateTime = utcLocalDateTime.atZone(ZONE_ID_UTC);
-        var jstZonedDateTime = utcZonedDateTime.withZoneSameInstant(ZONE_ID_JST);
+    /**
+     * Convert UTC Local date time to JST offset date time.
+     *
+     * @param utcLocalDateTime UTC Local date time
+     * @return JST offset date time
+     */
+    public static OffsetDateTime toJSTOffsetDateTimeWithUtc(final LocalDateTime utcLocalDateTime) {
+        final var utcZonedDateTime = utcLocalDateTime.atZone(ZONE_ID_UTC);
+        final var jstZonedDateTime = utcZonedDateTime.withZoneSameInstant(ZONE_ID_JST);
+
         return jstZonedDateTime.toOffsetDateTime();
     }
 
-    public static LocalDateTime toUtcLocalDateTime(LocalDateTime jstLocalDateTime) {
-        var jstZonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
-        var utcZonedDateTime = jstZonedDateTime.withZoneSameInstant(ZONE_ID_UTC);
+    /**
+     * Convert JST Local date time to UTC Local date time.
+     *
+     * @param jstLocalDateTime JST Local date time
+     * @return UTC Local date time
+     */
+    public static LocalDateTime toUtcLocalDateTime(final LocalDateTime jstLocalDateTime) {
+        final var jstZonedDateTime = jstLocalDateTime.atZone(ZONE_ID_JST);
+        final var utcZonedDateTime = jstZonedDateTime.withZoneSameInstant(ZONE_ID_UTC);
+
         return utcZonedDateTime.toLocalDateTime();
     }
 
-    public static Date getDateSystemDefaultZone(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+    /**
+     * Get date by specified arguments on system default zone.
+     *
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @param hour hour
+     * @param minute minute
+     * @param second second
+     * @return {@code Date}
+     */
+    public static Date getDateSystemDefaultZone(final int year,
+                                                final int month,
+                                                final int dayOfMonth,
+                                                final int hour,
+                                                final int minute,
+                                                final int second) {
         return Date.from(
             ZonedDateTime.of(
                 year, month, dayOfMonth, hour, minute, second, 0, ZoneId.systemDefault()
@@ -177,61 +283,97 @@ public final class DateTimeUtils {
         );
     }
 
-    public static OffsetDateTime toOffsetDateTimeUtc(Date date) {
+    /**
+     * Convert date to offset date time on utc zone.
+     *
+     * @param date date
+     * @return offset date time on utc zone
+     */
+    public static OffsetDateTime toOffsetDateTimeUtc(final Date date) {
         return date.toInstant().atOffset(ZoneOffset.UTC);
     }
 
-    public static Date toDate(LocalDateTime localDateTime) {
+    /**
+     * Convert Local date time to Date.
+     * @param localDateTime local date time
+     * @return Date
+     */
+    public static Date toDate(final LocalDateTime localDateTime) {
         if (Objects.isNull(localDateTime)) {
-            return null;
+            throw new IllegalArgumentException("specified localDateTime cannot be null.");
         }
 
-        var zonedDateTime = ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
+        final var zonedDateTime = ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
+
         return Date.from(zonedDateTime.toInstant());
     }
 
-    public static Date toDate(LocalDate localDate) {
+    /**
+     * Convert Local date to Date.
+     *
+     * @param localDate local date
+     * @return Date
+     */
+    public static Date toDate(final LocalDate localDate) {
         if (Objects.isNull(localDate)) {
-            return null;
+            throw new IllegalArgumentException("specified localDate cannot be null.");
         }
 
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
-    public static Date toDate(OffsetDateTime offsetDateTime) {
+    /**
+     * Convert offset date time to date.
+     *
+     * @param offsetDateTime offset date time
+     * @return date
+     */
+    public static Date toDate(final OffsetDateTime offsetDateTime) {
         if (Objects.isNull(offsetDateTime)) {
-            return null;
+            throw new IllegalArgumentException("specified offsetDateTime cannot be null.");
         }
         return Date.from(offsetDateTime.toInstant());
     }
 
     /**
-     * 文字列データをLocalDateTimeにする.
-     * yyyy-MM-dd hh:mm:ss
+     * String (format: yyyy-MM-dd hh:mm:ss) to local date time
      *
-     * @param dateTimeString 文字列DateTime
+     * @param dateTimeString string
      * @return LocalDateTime
      */
-    public static LocalDateTime toLocalDateTime(String dateTimeString) {
+    public static LocalDateTime toLocalDateTime(final String dateTimeString) {
         return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**
      * Convert from JST OffsetDateTime to UTC LocalDateTime.
      *
-     * @param jstOffsetDateTimeString OffsetDateTime
+     * @param source OffsetDateTime
      * @return LocalDateTime
      */
-    public static LocalDateTime toUtcLocalDateTime(String jstOffsetDateTimeString) {
-        var jstOffsetDateTime = OffsetDateTime.parse(jstOffsetDateTimeString);
+    public static LocalDateTime toUtcLocalDateTime(final String source) {
+        final var jstOffsetDateTime = OffsetDateTime.parse(source);
+
         return toUtcLocalDateTime(jstOffsetDateTime);
     }
 
-    public static LocalDateTime toUtcLocalDateTime(OffsetDateTime jstOffsetDateTime) {
+    /**
+     * Convert JST offset date time to UTC Local date time.
+     *
+     * @param jstOffsetDateTime JST offset date time
+     * @return UTC Local date time
+     */
+    public static LocalDateTime toUtcLocalDateTime(final OffsetDateTime jstOffsetDateTime) {
         return ZonedDateTime.ofInstant(jstOffsetDateTime.toInstant(), ZONE_ID_UTC).toLocalDateTime();
     }
 
-    public static LocalDateTime toSystemZoneLocalDateTime(OffsetDateTime offsetDateTime) {
+    /**
+     * Convert offset date time on system default zone to Local date time.
+     *
+     * @param offsetDateTime offset date time on system default zone
+     * @return Local date time
+     */
+    public static LocalDateTime toSystemZoneLocalDateTime(final OffsetDateTime offsetDateTime) {
         if (Objects.isNull(offsetDateTime)) {
             throw new IllegalArgumentException("OffsetDateTime cannot be null");
         }
@@ -239,14 +381,29 @@ public final class DateTimeUtils {
         return offsetDateTime.atZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-
-    public static boolean isBefore(Date time1, LocalDateTime time2) {
+    /**
+     * Determine specified time1 (type: Date) isBefore than
+     * specified time2 (type: LocalDateTime)
+     * @param time1 Date
+     * @param time2 LocalDateTime
+     * @return Determine result
+     */
+    public static boolean isBefore(final Date time1, final LocalDateTime time2) {
         return time1.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().isBefore(time2);
     }
 
-    public static boolean isValidDate(int year, int month, int dayOfMonth) {
+    /**
+     * Determine specified arguments is valid date.
+     *
+     * @param year year
+     * @param month month
+     * @param dayOfMonth dayOfMonth
+     * @return Determine result
+     */
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    public static boolean isValidDate(final int year, final int month, final int dayOfMonth) {
         try {
-            var date = LocalDate.of(year, month, dayOfMonth);
+            final var date = LocalDate.of(year, month, dayOfMonth);
 
             return year == date.getYear() && month == date.getMonthValue() && dayOfMonth == date.getDayOfMonth();
         } catch (DateTimeException e) {
@@ -254,20 +411,4 @@ public final class DateTimeUtils {
         }
     }
 
-    public static OffsetDateTime dateStringToOffsetDateTimeAtStartOfDay(
-        String dateTimeString, DateTimeFormatter dateTimeFormatter, ZoneId zoneId
-    ) {
-        return LocalDate.parse(dateTimeString, dateTimeFormatter)
-            .atStartOfDay(zoneId)
-            .toOffsetDateTime();
-    }
-
-    public static OffsetDateTime dateStringToOffsetDateTimeAtEndOfDay(
-        String dateTimeString, DateTimeFormatter dateTimeFormatter, ZoneId zoneId
-    ) {
-        return LocalDate.parse(dateTimeString, dateTimeFormatter)
-            .atTime(LocalTime.MAX)
-            .atZone(zoneId)
-            .toOffsetDateTime();
-    }
 }
