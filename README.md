@@ -12,7 +12,6 @@
 
   for example: `convertToOffsetDateTime(LocalDateTime source)`
 
-
 # dependency
 
 - maven
@@ -21,7 +20,7 @@
   <dependency>
       <groupId>io.github.mitsumi-solutions-develop</groupId>
       <artifactId>java-shared-utils</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.2</version>
   </dependency>
   ```
 

@@ -6,7 +6,7 @@
 
     <groupId>io.github.mitsumi-solutions-develop</groupId>
     <artifactId>java-shared-utils</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>java-shared-utils</name>
     <description>java-shared-utils</description>
