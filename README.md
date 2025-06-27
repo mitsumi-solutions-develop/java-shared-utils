@@ -12,6 +12,10 @@
 
   for example: `convertToOffsetDateTime(LocalDateTime source)`
 
+- StringCaseUtils
+  - snakeToCamel
+  - camelToSnake
+
 # dependency
 
 - maven
