@@ -6,7 +6,7 @@
 
     <groupId>io.github.mitsumi-solutions-develop</groupId>
     <artifactId>java-shared-utils</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-alpha</version>
     <packaging>jar</packaging>
     <name>java-shared-utils</name>
     <description>java-shared-utils</description>
@@ -120,7 +120,7 @@
                 <configuration>
                     <publishingServerId>central</publishingServerId>
                     <autoPublish>true</autoPublish>
-                    <waitUntil>published</waitUntil>
+                    <waitUntil>validated</waitUntil>
                 </configuration>
             </plugin>
             <plugin>

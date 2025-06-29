@@ -16,6 +16,8 @@
   - snakeToCamel
   - camelToSnake
 
+- UUIDUtils
+
 # dependency
 
 - maven
@@ -24,12 +26,12 @@
   <dependency>
       <groupId>io.github.mitsumi-solutions-develop</groupId>
       <artifactId>java-shared-utils</artifactId>
-      <version>1.0.2</version>
+      <version>1.0.3-alpha</version>
   </dependency>
   ```
 
 - gradle
 
   ```
-  implementation group: 'io.github.mitsumi-solutions-develop', name: 'java-shared-utils', version: '1.0.0'
+  implementation group: 'io.github.mitsumi-solutions-develop', name: 'java-shared-utils', version: '1.0.3-alpha'
   ```

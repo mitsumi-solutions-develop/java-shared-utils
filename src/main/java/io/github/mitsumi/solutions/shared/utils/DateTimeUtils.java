@@ -13,7 +13,7 @@ import java.util.Objects;
  *
  * @author mitsumi.kaneyama
  */
-@SuppressWarnings({"PMD.UseExplicitTypes", "PMD.TooManyMethods"})
+@SuppressWarnings({"PMD.UseExplicitTypes", "PMD.TooManyMethods", "PMD.CommentSize"})
 @UtilityClass
 public final class DateTimeUtils {
 
