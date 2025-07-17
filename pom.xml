@@ -41,7 +41,7 @@
         <junit.jupiter.version>5.12.2</junit.jupiter.version>
         <assertj.version>4.0.0-M1</assertj.version>
         <hamcrest.version>3.0</hamcrest.version>
-        <common-lang.version>3.17.0</common-lang.version>
+        <common-lang.version>3.18.0</common-lang.version>
     </properties>
     <distributionManagement>
         <repository>

@@ -25,7 +25,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
       - name: Source code check
-        run: mvn site
+        run: mvn clean pmd:check
       - name: Test with Maven
         run: mvn test
 
